@@ -1,0 +1,6 @@
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+PorousMaterials = "68953c7c-a3c7-538e-83d3-73516288599e"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+VegaLite = "112f6efa-9a02-5b7d-90c0-432ed331239a"
