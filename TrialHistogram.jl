@@ -4,7 +4,8 @@ using CSV, DataFrames, VegaLite
 
 function trial_histogram(path)
 
-    trials = DataFrame(CSV.File(path, header=["energy", "ins", "del", "x", "y", "z"]))
+    trials = DataFrame(CSV.File(path, header=["index", "E_gh_vdw","E_gh_q", "E_gg_vdw", "E_gg_q", "ins", "ins_empty", "ins_empty", "ins_full", "x", "y", "z"]
+
     trials.ins_del = log10.(max.(1e-4,min.(1.0,trials.ins) ./ min.(1.0, trials.del)))
     trials.cycles_to_deletion = 1 ./ trials.del
     sort!(trials, :ins_del)
