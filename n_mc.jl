@@ -30,5 +30,5 @@ batch_moves = true
 # molecule_name = "CO2"
 
 n_mc(molecule_name, pressure_pa, n_subcycles, batch_moves=batch_moves)
-e_df = readdlm("energy_log_$(molecule_name)_$(pressure_pa)_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").txt", '\t', Float64, '\n')
+e_df = DataFrames.readtable("energy_log_$(molecule_name)_$(pressure_pa)_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").tsv", )
 e_df
