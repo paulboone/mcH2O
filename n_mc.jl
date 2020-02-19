@@ -17,7 +17,7 @@ function n_mc(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
 
     # conduct grand-canonical Monte Carlo simulation
     results, molecules = gcmc_simulation(framework, molecule, temperature, pressure, forcefield,
-                n_burn_cycles=1, n_sample_cycles=5, n_subcycles=n_subcycles,
+                n_burn_cycles=4, n_sample_cycles=16, n_subcycles=n_subcycles,
                 write_adsorbate_snapshots=true, snapshot_frequency=1,
                 batch_moves=batch_moves)
 
@@ -25,7 +25,7 @@ end
 
 pressure_pa = 4500.0
 molecule_name = "H2O_tip4p"
-n_subcycles = 4000
+n_subcycles = 10
 batch_moves = true
 # molecule_name = "CO2"
 
