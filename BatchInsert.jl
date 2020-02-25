@@ -1,5 +1,5 @@
 
-
+import CSV
 using PorousMaterials
 
 
@@ -21,6 +21,6 @@ function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_mo
                 write_adsorbate_snapshots=true, snapshot_frequency=1,
                 batch_moves=batch_moves)
 
-    e_df = CSV.File("energy_log_$(molecule_name)_$(pressure_pa)_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").tsv") |> DataFrame
+    e_df = CSV.File("energy_log_$(molecule_name)_$(float(pressure_pa))_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").tsv") |> DataFrame
     return results, molecules, e_df
 end
