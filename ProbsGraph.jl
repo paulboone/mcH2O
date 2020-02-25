@@ -3,7 +3,9 @@ using DataFrames
 using LinearAlgebra
 import Statistics
 
-function probs_graph(probs)
+using PorousMaterials
+
+function gcmc_bestofNandrepeat_plot(probs)
     num_rows = *(size(probs)...)
 
     plots = @vlplot(
@@ -37,4 +39,21 @@ function probs_graph(probs)
                     )
 
     plots |> display
+end
+
+function gcmc_bestofNandrepeat_data(molecule_name, pressure_pa, max_trials)
+
+    framework = Framework("ZIF-8q.cif")
+    strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
+
+    forcefield = LJForceField("Dreiding.csv", cutoffradius=12.8)
+    molecule = Molecule(molecule_name)
+
+    temperature = 298.0 # K
+    pressure = pressure_pa / 100000 # bar
+
+    # conduct grand-canonical Monte Carlo simulation
+    return gcmc_bestofNandrepeat(framework, molecule, temperature, pressure, forcefield,
+                max_adsorbates=100, max_trials=max_trials)
+
 end
