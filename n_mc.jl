@@ -3,7 +3,7 @@
 using PorousMaterials
 
 
-function n_mc(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
+function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
 
     framework = Framework("ZIF-8q.cif")
     strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
@@ -21,14 +21,6 @@ function n_mc(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
                 write_adsorbate_snapshots=true, snapshot_frequency=1,
                 batch_moves=batch_moves)
 
+    e_df = CSV.File("energy_log_$(molecule_name)_$(pressure_pa)_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").tsv") |> DataFrame
+    return results, molecules, e_df
 end
-
-pressure_pa = 4500.0
-molecule_name = "H2O_tip4p"
-n_subcycles = 10
-batch_moves = true
-# molecule_name = "CO2"
-
-n_mc(molecule_name, pressure_pa, n_subcycles, batch_moves=batch_moves)
-e_df = CSV.File("energy_log_$(molecule_name)_$(pressure_pa)_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").tsv") |> DataFrame
-e_df
