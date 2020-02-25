@@ -28,9 +28,14 @@ function trial_histogram_vegalite(path)
     trials
 end
 
-function trial_histogram_plots(path)
-
-    trials = DataFrame(CSV.File(path))
+function trial_histogram_plots(;path=nothing, df=nothing)
+    if ! isnothing(path)
+        trials = DataFrame(CSV.File(path))
+    elseif ! isnothing(df)
+        trials = deepcopy(df)
+    else
+        error("either path or df must be passed to trial_histogram_plots")
+    end
 
     trials.log_ins = log10.(clamp.(trials.insprob, 1e-4, 1e+4))
     sort!(trials, :log_ins)
@@ -62,6 +67,5 @@ function trial_insertions_data(molecule_name, pressure_pa, max_trials)
     pressure = pressure_pa / 100000 # bar
 
     # conduct grand-canonical Monte Carlo simulation
-    gcmc_trial_insertions(framework, molecule, temperature, pressure, forcefield, max_trials=max_trials)
-
+    return gcmc_trial_insertions(framework, molecule, temperature, pressure, forcefield, max_trials=max_trials)
 end
