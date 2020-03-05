@@ -1,10 +1,9 @@
 using JLD2
 using PorousMaterials
+using PrettyPrinting
 
 
-function load_molecules_from_checkpoint(checkpoint_path, molecule="TIP4P-1")
-
-    @load checkpoint_path checkpoint
+function load_molecules_from_checkpoint(checkpoint, molecule="TIP4P-1")
 
     h2o_singles = Molecule[]
 
@@ -27,4 +26,11 @@ function load_molecules_from_checkpoint(checkpoint_path, molecule="TIP4P-1")
     println("resulting h2os: $(size(h2o_singles)) ")
 
     return h2o_singles
+end
+
+function checkpoint_summary(checkpoint::Dict)
+    chk2 = deepcopy(checkpoint)
+    delete!(chk2, "molecules")
+    delete!(chk2, "gcmc_stats")
+    pprint(chk2)
 end
