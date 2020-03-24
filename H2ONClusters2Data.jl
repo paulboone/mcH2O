@@ -3,8 +3,22 @@ using CSV
 using DataFrames
 using Glob
 
+"""
+    convert_tip4pNcluster_data(searchglob, dir="h2o-n-clusters", outputdir="data")
 
+Creates PorousMaterials.jl input files (lennard_jones_spheres.csv and point_charges.csv)
+for files matching passed searchglob. Files are expected to be xyz files containing atom positions
+for H2O molecules; atom positions will be used to construct TIP4P representations of each water
+molecule and output to PorousMaterials.jl input files.
+
+The original purpose of this was to convert the output from all the globally minimized H2O
+N-clusters from (1) James, T.; Wales, D. J.; Hernández-Rojas, J. Global Minima for Water Clusters
+(H2O)n, N⩽21, Described by a Five-Site Empirical Potential. Chemical Physics Letters 2005,
+415 (4–6), 302–307. https://doi.org/10.1016/j.cplett.2005.09.019.
+
+"""
 function convert_tip4pNcluster_data(searchglob; dir="h2o-n-clusters", outputdir="data")
+
     chargemap = Dict("O" => -1.04, "H" => 0.52)
     mkpath(joinpath(dir, outputdir))
 
@@ -12,6 +26,7 @@ function convert_tip4pNcluster_data(searchglob; dir="h2o-n-clusters", outputdir=
         molecule_path = joinpath(dir, "data", (xyz_path |> basename |> splitext)[1])
         mkpath(molecule_path)
         df = DataFrame(CSV.File(xyz_path; header=[:atom, :x, :y, :z], skipto=3, delim=" ", ignorerepeated=true,))
+
         # write lennard_jones_spheres.csv
         lj = deepcopy(df[df.atom .== "O", :])
         lj.atom .= "O_h2o"

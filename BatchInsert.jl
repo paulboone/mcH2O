@@ -3,6 +3,13 @@ import CSV
 using PorousMaterials
 
 
+"""
+    results, molecules, e_df = gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
+
+Helper that runs a GCMC for ZIF-8 with all our default settings (Dreiding, 298K) and returns the
+results (from PorousMaterials.jl), the adsorbed molecules, and the energy data frame from loading
+the energy_log.
+"""
 function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
 
     framework = Framework("ZIF-8q.cif")
@@ -17,7 +24,7 @@ function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_mo
 
     # conduct grand-canonical Monte Carlo simulation
     results, molecules = gcmc_simulation(framework, molecule, temperature, pressure, forcefield,
-                n_burn_cycles=4, n_sample_cycles=16, n_subcycles=n_subcycles,
+                n_burn_cycles=4, n_sample_cycles=4, n_subcycles=n_subcycles,
                 write_adsorbate_snapshots=true, snapshot_frequency=1,
                 batch_moves=batch_moves)
 

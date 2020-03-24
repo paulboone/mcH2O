@@ -41,7 +41,18 @@ function gcmc_bestofNandrepeat_plot(probs)
     plots |> display
 end
 
-function gcmc_bestofNandrepeat_data(molecule_name, pressure_pa, max_trials)
+
+"""
+    mol_probs = gcmc_bestofNandrepeat_data(molecule_name, pressure_pa, max_trials; molecule_multiplier=1)
+
+Helper that runs a GCMC best-of-N-trials-and-repeat for ZIF-8 with all our default settings
+(Dreiding, 298K) and returns molecule_probs of each insert. A GCMC best-of-N-trials-and-repeat is
+when you take N trial insertions, take the best insertion (with the lowest ∆E) and if the insertion
+probability is >= 1.0 (i.e. 100% chance of insertion), then insert it; repeat until we get a round
+where all N trials have insertion probability < 1.0. Returns the molecule probabilities for plotting
+with `gcmc_bestofNandrepeat_plot`.
+"""
+function gcmc_bestofNandrepeat_data(molecule_name, pressure_pa, max_trials; molecule_multiplier=1)
 
     framework = Framework("ZIF-8q.cif")
     strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
