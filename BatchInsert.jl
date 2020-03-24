@@ -9,6 +9,10 @@ using PorousMaterials
 Helper that runs a GCMC for ZIF-8 with all our default settings (Dreiding, 298K) and returns the
 results (from PorousMaterials.jl), the adsorbed molecules, and the energy data frame from loading
 the energy_log.
+
+Can run in two modes:
+- batch_moves=false: normal probability of MC moves
+- batch_moves=true: "batches" MC moves, e.g. runs 1000 inserts, 1000 moves, 1000 deletes, 1000 moves.
 """
 function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
 

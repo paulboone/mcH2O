@@ -4,6 +4,27 @@ using Plots
 
 using PorousMaterials
 
+"""
+    trials_df = trial_insertions_data(molecule_name, pressure_pa, max_trials)
+
+Helper that runs N insertion trials for ZIF-8 with all our default settings (Dreiding, 298K) and
+returns a trials dataframe containing the energy, the insertion probability, and the coordinates of
+each trial.
+"""
+function trial_insertions_data(molecule_name, pressure_pa, max_trials)
+
+    framework = Framework("ZIF-8q.cif")
+    strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
+
+    forcefield = LJForceField("Dreiding.csv", cutoffradius=12.8)
+    molecule = Molecule(molecule_name)
+
+    temperature = 298.0 # K
+    pressure = pressure_pa / 100000 # bar
+
+    # conduct grand-canonical Monte Carlo simulation
+    return gcmc_trial_insertions(framework, molecule, temperature, pressure, forcefield, max_trials=max_trials)
+end
 
 function trial_histogram_vegalite(path)
 
@@ -52,20 +73,4 @@ function trial_histogram_plots(;path=nothing, df=nothing)
     vline!(plot_ctd, [0], lc="grey", lw=2, label="")
 
     plot(plot_count, plot_ctd, size=(800,800), dpi=300, layout=grid(2,1))
-end
-
-
-function trial_insertions_data(molecule_name, pressure_pa, max_trials)
-
-    framework = Framework("ZIF-8q.cif")
-    strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
-
-    forcefield = LJForceField("Dreiding.csv", cutoffradius=12.8)
-    molecule = Molecule(molecule_name)
-
-    temperature = 298.0 # K
-    pressure = pressure_pa / 100000 # bar
-
-    # conduct grand-canonical Monte Carlo simulation
-    return gcmc_trial_insertions(framework, molecule, temperature, pressure, forcefield, max_trials=max_trials)
 end
