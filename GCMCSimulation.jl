@@ -14,7 +14,8 @@ Can run in two modes:
 - batch_moves=false: normal probability of MC moves
 - batch_moves=true: "batches" MC moves, e.g. runs 1000 inserts, 1000 moves, 1000 deletes, 1000 moves.
 """
-function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_moves=false)
+function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_moves=false,
+            molecule_multiplier=1)
 
     framework = Framework("ZIF-8q.cif")
     strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
@@ -30,7 +31,7 @@ function gcmc_batchinsert_data(molecule_name, pressure_pa, n_subcycles; batch_mo
     results, molecules = gcmc_simulation(framework, molecule, temperature, pressure, forcefield,
                 n_burn_cycles=4, n_sample_cycles=4, n_subcycles=n_subcycles,
                 write_adsorbate_snapshots=true, snapshot_frequency=1,
-                batch_moves=batch_moves)
+                batch_moves=batch_moves, molecule_multiplier=molecule_multiplier)
 
     e_df = CSV.File("energy_log_$(molecule_name)_$(float(pressure_pa))_n$(n_subcycles)_$(batch_moves ? "batch" : "baseline").tsv") |> DataFrame
     return results, molecules, e_df

@@ -15,7 +15,7 @@ function gcmc_bestofNandrepeat_plot(probs)
                         prob=log10.(replace(vec(probs), 0.0=>NaN))
                     ),
                 x={"num_molecules", title="Molecule insert #", type="quantitative"},
-                y={"prob", title="log(insert probability)", type="quantitative", scale={domain=[-2.0, 8.0]}},
+                y={"prob", title="log(insert probability)", type="quantitative"}, #scale={domain=[-2.0, 8.0]}
                 opacity={value=1},
                 width=800,
                 height=800
@@ -65,6 +65,6 @@ function gcmc_bestofNandrepeat_data(molecule_name, pressure_pa, max_trials; mole
 
     # conduct grand-canonical Monte Carlo simulation
     return gcmc_bestofNandrepeat(framework, molecule, temperature, pressure, forcefield,
-                max_adsorbates=100, max_trials=max_trials)
+                max_adsorbates=100, max_trials=max_trials, molecule_multiplier=molecule_multiplier)
 
 end
