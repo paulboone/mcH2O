@@ -5,3 +5,7 @@
 *.tsv
 *.csv
 /Manifest.toml
+/data
+/h2o-sims
+/old_data
+/old_data_2020_03_23
