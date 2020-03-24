@@ -1,8 +1,9 @@
 import os
 
-# import click
-
 def split_xyz(xyzpath, out_dir):
+    """ Splits xyz created by PorousMaterials.jl and outputs many xyz files (one per each checkpoint
+    in the original file.
+    """
     idx = 0
     with open(xyzpath, "r") as f:
         line = next(f)
@@ -30,5 +31,3 @@ def split_xyz(xyzpath, out_dir):
                 line = next(f)
             except StopIteration:
                 break
-
-split_xyz("gcmc_ZIF-8q_H2O_tip4p_T298.000000_P0.045000_Dreiding_4burn_400sample_adsorbate_positions_batch.xyz", "xyzout_batch")
