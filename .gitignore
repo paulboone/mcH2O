@@ -1,6 +1,7 @@
 *.png
-*.csv
 .DS_Store
 *.cif
 *.xyz
-/data
+*.tsv
+*.csv
+/Manifest.toml
