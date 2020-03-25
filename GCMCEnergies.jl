@@ -23,7 +23,7 @@ function calc_all_TIP4P_n_cluster_energies(framework_name="empty_box_30.cssr")
     a = zeros(21)
     for i in range(1,21)
         e = h2o_cluster_intra_energy(framework_name, "TIP4P-$i")
-        a[i] = (e.guest_guest.vdw + e.guest_guest.coulomb)* 0.00831435
+        a[i] = (e.guest_guest.vdw + e.guest_guest.coulomb) * 0.00831435
     end
     return a
 end
