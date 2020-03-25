@@ -1,7 +1,7 @@
+using DataFrames
 using JLD2
 using PorousMaterials
 using PrettyPrinting
-
 
 """
 
@@ -51,4 +51,36 @@ function checkpoint_summary(checkpoint::Dict)
     delete!(chk2, "molecules")
     delete!(chk2, "gcmc_stats")
     pprint(chk2)
+end
+
+
+"""
+    df = tip4P_checkpoint_to_df(checkpoint)
+
+Takes a checkpoint containing H2O TIP4P molecules (or clusters) and returns a dataframe of
+[atom type, x, y, z]. In conjunction with df_to_xyz(), you can easily convert a checkpoint to an xyz
+for display in iRaspa. e.g:
+
+    @load path_to_checkpoint checkpoint
+    df_to_xyz(tip4P_checkpoint_to_df(checkpoint), "test.xyz")
+
+"""
+function tip4P_checkpoint_to_df(checkpoint)
+    h2o_singles = reshape_h2o_cluster_to_single_h2os_from_checkpoint(checkpoint)
+    df = DataFrame(atom=String[], x=Float64[], y=Float64[], z=Float64[])
+    for m in h2o_singles
+        push!(df, ("O", m.atoms.xf...))
+        push!(df, ("H", m.charges.xf[:,1]...))
+        push!(df, ("H", m.charges.xf[:,2]...))
+        push!(df, ("H", m.charges.xf[:,3]...))
+    end
+    return df
+end
+
+function df_to_xyz(df, xyz_path)
+    open(xyz_path, "w") do f
+        println(f, size(df, 1))
+        println(f)
+        CSV.write(f, df; delim=" ", append=true)
+    end
 end
