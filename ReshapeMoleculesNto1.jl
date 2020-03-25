@@ -10,13 +10,15 @@ using PrettyPrinting
 Takes all the adsorbed molecules (typically an H2O N-cluster) from a checkpoint file and splits each
 N-cluster into its individual H2O molecules (typically, a TIP4P-1).
 """
-function reshape_h2o_cluster_to_single_h2os_from_checkpoint(checkpoint, molecule="TIP4P-1")
+function reshape_h2o_cluster_to_single_h2os_from_checkpoint(checkpoint; verbose=false)
+    molecule="TIP4P-1"
+    h2o_singles = Molecule[]
     for m in checkpoint["molecules"]
-        println("$(m.atoms.n_atoms) h2os in molecule")
-        h2o_singles = h2o_singles_from_n_cluster(m, molecule)
+        verbose && println("$(m.atoms.n_atoms) h2os in molecule")
+        push!(h2o_singles, h2o_singles_from_n_cluster(m, molecule)...)
     end
 
-    println("resulting h2os: $(size(h2o_singles)) ")
+    verbose && println("resulting h2os: $(size(h2o_singles)) ")
 
     return h2o_singles
 end
