@@ -19,11 +19,17 @@ function h2o_cluster_intra_energy(framework_name, molecule_name="TIP4P-2")
     return gcmc_energy(framework, m1, h2o_singles, forcefield)
 end
 
+"""
+    a = calc_all_TIP4P_n_cluster_energies(framework_name="empty_box_30.cssr"))
+
+results in K. multiply by * 0.00831435 to get KJ / mol
+"""
 function calc_all_TIP4P_n_cluster_energies(framework_name="empty_box_30.cssr")
+
     a = zeros(21)
     for i in range(1,21)
         e = h2o_cluster_intra_energy(framework_name, "TIP4P-$i")
-        a[i] = (e.guest_guest.vdw + e.guest_guest.coulomb) * 0.00831435
+        a[i] = (e.guest_guest.vdw + e.guest_guest.coulomb)
     end
     return a
 end
