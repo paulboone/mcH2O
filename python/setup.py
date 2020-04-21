@@ -18,9 +18,10 @@ setup(
           'console_scripts': [
               'h2o-raspa2cyclescsv = h2ohelp.raspa2cyclescsv:raspa2cyclescsv',
               'h2o-plot-cycles-csv = h2ohelp.plot_cycles_csv:plot_cycles_csv',
-              'h2o-rasparestart-split-dimer = h2ohelp.split_restart_dimer:split_restart_dimer',
-              'h2o-splix-xyz = h2ohelp.split_xyz:split_xyz',
-
+              'h2o-rasparestart-split-dimer = h2ohelp.restart_split_dimer:restart_split_dimer',
+              'h2o-split-xyz = h2ohelp.split_xyz:split_xyz',
+              'h2o-isotherm-csv = h2ohelp.isotherm:isotherm_csv',
+              'h2o-isotherm-plot = h2ohelp.isotherm:isotherm_plot'
           ]
       },
 )
