@@ -10,6 +10,14 @@ function h2o-outputs2csvs
     end
 end
 
+function h2o-h2poutputs2csvs
+    for d in $argv
+      set outputcsv $d.csv
+      echo $outputcsv
+      cat $d/results*/Output/*/*.data | h2o-raspa2cyclescsv - >> $outputcsv
+    end
+end
+
 function h2o-csvs2plots
     for d in $argv
         echo outputting $d.png
@@ -59,6 +67,8 @@ end
 # end
 
 
+
+
 function h2o-restart
   set cycles $argv[1]
   set initcycles $argv[2]
@@ -91,5 +101,52 @@ function h2o-restart
 
     # archive raspa lgo
     mv $simdir/raspajob.log $simdir/raspajob.log.$restartnum
+  end
+end
+
+
+function h2o-cleanup-dimers
+  set setupfiles $argv
+
+  for setuppath in $setupfiles
+    set simdir (dirname $setuppath)
+    set restartnum (math (ls -l $setuppath* | wc -l) - 1)
+
+    # archive existing .setup file
+    cp $setuppath $setuppath.$restartnum
+
+    # archive results dir
+    if test -d $simdir/results
+      mv $simdir/results $simdir/results.$restartnum
+    end
+
+    mkdir -p $simdir/dimer-results
+    if test (count $simdir/results*) -gt 0
+      mv $simdir/results* $simdir/dimer-results/
+    end
+    if test (count $simdir/raspajob.log*) -gt 0
+      mv $simdir/raspajob.log* $simdir/dimer-results/
+    end
+    # remove existing RestartInitial dir
+    if test -d $simdir/RestartInitial
+      rm -rf $simdir/RestartInitial
+    end
+  end
+end
+
+function h2o-split-restart
+  set setupfiles $argv
+
+  for setuppath in $setupfiles
+    set simdir (dirname $setuppath)
+    set restartnum (math (ls -d $simdir/dimer-results/results* | wc -l) - 1)
+
+    # split dimers to singles
+    mkdir -p $simdir/RestartInitial/System_0/
+    set restart_file (ls $simdir/dimer-results/results.$restartnum/Restart/System_0/)
+    set dimer_restart_file_in $simdir/dimer-results/results.$restartnum/Restart/System_0/$restart_file
+    set single_restart_file_out $simdir/RestartInitial/System_0/$restart_file
+
+    h2o-rasparestart-split-dimer $dimer_restart_file_in > $single_restart_file_out
   end
 end
