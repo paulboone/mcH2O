@@ -11,7 +11,7 @@ Helper that runs N insertion trials for ZIF-8 with all our default settings (Dre
 returns a trials dataframe containing the energy, the insertion probability, and the coordinates of
 each trial.
 """
-function trial_insertions_data(molecule_name, pressure_pa, max_trials; molecule_multiplier=1)
+function trial_insertions_data(molecule_name, pressure_pa, max_trials; molecule_multiplier=1, file_suffix="")
 
     framework = Framework("ZIF-8q.cif")
     strip_numbers_from_atom_labels!(framework) # remove annoying numbers from atom labels
@@ -24,9 +24,14 @@ function trial_insertions_data(molecule_name, pressure_pa, max_trials; molecule_
 
     # conduct grand-canonical Monte Carlo simulation
     return gcmc_trial_insertions(framework, molecule, temperature, pressure, forcefield,
-                max_trials=max_trials, molecule_multiplier=molecule_multiplier)
+                max_trials=max_trials, molecule_multiplier=molecule_multiplier,
+                file_suffix=file_suffix)
 end
 
+
+"""
+This is deprecated in favor of trial_histogram_plots below.
+"""
 function trial_histogram_vegalite(path)
 
     trials = DataFrame(CSV.File(path))
