@@ -35,6 +35,16 @@ function setup-sim-dirs-for-pressures
   end
 end
 
+
+function setup-sim-dirs-for-pressures-pm
+  set template_path $argv[1]
+  set pressures $argv[2..-1]
+
+  for p in $pressures
+    cp -R $template_path ./P$p
+    gsed -i -e "s|^pressure_pa.*|pressure_pa = $p|" ./P$p/run.jl
+  end
+end
 # first arg is path to .slurm file, next N args are paths to .input files. Typically used from
 # directory containing sim dirs:
 #   sbatch-all ./raspa.slurm P*/h2o_dimer.input
@@ -99,7 +109,7 @@ function h2o-restart
     # copy most recent Restart dir
     cp -R $simdir/results.$restartnum/Restart $simdir/RestartInitial
 
-    # archive raspa lgo
+    # archive raspa log
     mv $simdir/raspajob.log $simdir/raspajob.log.$restartnum
   end
 end
