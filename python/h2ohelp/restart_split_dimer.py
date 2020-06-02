@@ -6,7 +6,9 @@ import click
 @click.command()
 @click.argument('restart_file', type=click.File())
 def restart_split_dimer(restart_file):
-
+    """
+    Splits a RASPA restart file.
+"""
     comp1_re = r"(Components: 1 \(Adsorbates )(\d+)(, Cations 0\))"
     comp2_re = r"(Component: 0     Adsorbate    )(\d+)( molecules of )TIP4P-2"
 
